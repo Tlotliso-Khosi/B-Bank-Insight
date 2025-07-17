@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - B-Bank Assessment System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+        }
+
+        .login-left {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-left::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 20px,
+                rgba(255,255,255,0.05) 20px,
+                rgba(255,255,255,0.05) 40px
+            );
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+
+        .login-left-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-left h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .login-left p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .features-list {
+            list-style: none;
+        }
+
+        .features-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .features-list li::before {
+            content: '✓';
+            background: rgba(255,255,255,0.2);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .login-right {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 0.75rem;
+            text-align: center;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: #666;
+        }
+
+        .auth-tab.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e1e4e8;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .bank-select {
+            position: relative;
+        }
+
+        .bank-select select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+            background-size: 1rem;
+            padding-right: 3rem;
+        }
+
+        .password-group {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .form-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            z-index: 2;
+            transition: opacity 0.3s;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #c33;
+            display: none;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #363;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #363;
+            display: none;
+        }
+
+        /* Bank-specific styling */
+        .bank-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .bank-sb { background-color: #27ae60; }
+        .bank-pb { background-color: #3498db; }
+        .bank-fnb { background-color: #f39c12; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-container {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .login-left {
+                display: none;
+            }
+
+            .login-right {
+                padding: 2rem;
+            }
+
+            .back-link {
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                background: rgba(0,0,0,0.5);
+                padding: 0.5rem 1rem;
+                border-radius: 25px;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-left">
+            <a href="/" class="back-link">← Back to Home</a>
+            <div class="login-left-content">
+                <h1>🏦 Welcome Back</h1>
+                <p>Access the most advanced multi-model risk assessment system in the financial industry.</p>
+                <ul class="features-list">
+                    <li>AI-Powered Risk Analysis</li>
+                    <li>Multi-Institutes Model Integration</li>
+                    <li>Real-Time Decision Making</li>
+                    <li>Comprehensive Reporting</li>
+                    <li>Regulatory Compliance</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="login-right">
+            <div class="login-header">
+                <h2>Institute Personnel Access</h2>
+                <p>Secure login for authorized banking professionals</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('login')">Login</button>
+                <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+            </div>
+
+            <div class="error-message" id="error-message"></div>
+            <div class="success-message" id="success-message"></div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label for="login-bank">Bank Affiliation</label>
+                    <div class="bank-select">
+                        <select id="login-bank" name="bank" required>
+                            <option value="">Select your institute</option>
+                            <option value="SB">🏛️ Standard Bank (SB)</option>
+                            <option value="PB">🏦 Premier Bank (PB)</option>
+                            <option value="FNB">🏢 First National Bank (FNB)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" name="email" required placeholder="your.email@bank.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <div class="password-group">
+                        <input type="password" id="login-password" name="password" required placeholder="Enter your password">
+                        <button type="button" class="password-toggle" onclick="togglePassword('login-password')">👁️</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <span class="btn-text"> Access System</span>
+                </button>
+
+                <div class="form-footer">
+                    <a href="#" onclick="showForgotPassword()">Forgot your password?</a>
+                </div>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signup-form" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label for="signup-bank">Bank Affiliation</label>
+                    <div class="bank-select">
+                        <select id="signup-bank" name="bank" required>
+                            <option value="">Select your bank</option>
+                            <option value="SB">🏛️ Standard Bank (SB)</option>
+                            <option value="PB">🏦 Premier Bank (PB)</option>
+                            <option value="FNB">🏢 First National Bank (FNB)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" name="name" required placeholder="Tlotliso Khosi">
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-employee-id">Employee ID</label>
+                    <input type="text" id="signup-employee-id" name="employee_id" required placeholder="EMP001234">
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-email">Email Address</label>
+                    <input type="email" id="signup-email" name="email" required placeholder="your.email@bank.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <div class="password-group">
+                        <input type="password" id="signup-password" name="password" required placeholder="Create a strong password">
+                        <button type="button" class="password-toggle" onclick="togglePassword('signup-password')">👁️</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-confirm-password">Confirm Password</label>
+                    <div class="password-group">
+                        <input type="password" id="signup-confirm-password" name="confirm_password" required placeholder="Confirm your password">
+                        <button type="button" class="password-toggle" onclick="togglePassword('signup-confirm-password')">👁️</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <span class="btn-text">📝 Create Account</span>
+                </button>
+
+                <div class="form-footer">
+                    <p>By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const tabs = document.querySelectorAll('.auth-tab');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            
+            if (tab === 'login') {
+                loginForm.style.display = 'block';
+                signupForm.style.display = 'none';
+                tabs[0].classList.add('active');
+            } else {
+                loginForm.style.display = 'none';
+                signupForm.style.display = 'block';
+                tabs[1].classList.add('active');
+            }
+            
+            clearMessages();
+        }
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.nextElementSibling;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                button.textContent = '👁️';
+            }
+        }
+
+        function showMessage(message, type) {
+            const errorDiv = document.getElementById('error-message');
+            const successDiv = document.getElementById('success-message');
+            
+            if (type === 'error') {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+                successDiv.style.display = 'none';
+            } else {
+                successDiv.textContent = message;
+                successDiv.style.display = 'block';
+                errorDiv.style.display = 'none';
+            }
+        }
+
+        function clearMessages() {
+            document.getElementById('error-message').style.display = 'none';
+            document.getElementById('success-message').style.display = 'none';
+        }
+
+        function setLoading(button, loading) {
+            const btnText = button.querySelector('.btn-text');
+            if (loading) {
+                button.disabled = true;
+                btnText.innerHTML = '<span class="loading"></span>Processing...';
+            } else {
+                button.disabled = false;
+                btnText.innerHTML = button.id === 'login-form' ? '🚀 Access System' : '📝 Create Account';
+            }
+        }
+
+        function showForgotPassword() {
+            showMessage('Please contact your bank administrator to reset your password.', 'success');
+        }
+
+        // Login form submission
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const submitBtn = this.querySelector('.submit-btn');
+            
+            // Basic validation
+            if (!formData.get('bank')) {
+                showMessage('Please select your bank affiliation.', 'error');
+                return;
+            }
+            
+            if (!formData.get('email') || !formData.get('password')) {
+                showMessage('Please fill in all required fields.', 'error');
+                return;
+            }
+            
+            setLoading(submitBtn, true);
+            clearMessages();
+            
+            try {
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                setLoading(submitBtn, false);
+                
+                if (data.success) {
+                    showMessage('Login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1500);
+                } else {
+                    showMessage(data.message || 'Login failed. Please check your credentials.', 'error');
+                }
+            } catch (error) {
+                setLoading(submitBtn, false);
+                showMessage('Network error: ' + error.message, 'error');
+            }
+        });
+
+        // Signup form submission
+        document.getElementById('signup-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const submitBtn = this.querySelector('.submit-btn');
+            
+            // Validation
+            if (!formData.get('bank')) {
+                showMessage('Please select your bank affiliation.', 'error');
+                return;
+            }
+            
+            if (formData.get('password') !== formData.get('confirm_password')) {
+                showMessage('Passwords do not match.', 'error');
+                return;
+            }
+            
+            if (formData.get('password').length < 8) {
+                showMessage('Password must be at least 8 characters long.', 'error');
+                return;
+            }
+            
+            setLoading(submitBtn, true);
+            clearMessages();
+            
+            try {
+                const response = await fetch('/auth/signup', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                setLoading(submitBtn, false);
+                
+                if (data.success) {
+                    showMessage('Account created successfully! Please login.', 'success');
+                    setTimeout(() => {
+                        switchTab('login');
+                    }, 2000);
+                } else {
+                    showMessage(data.message || 'Signup failed. Please try again.', 'error');
+                }
+            } catch (error) {
+                setLoading(submitBtn, false);
+                showMessage('Network error: ' + error.message, 'error');
+            }
+        });
+
+        // Email validation for bank domains
+        document.querySelectorAll('input[type="email"]').forEach(input => {
+            input.addEventListener('blur', function() {
+                const email = this.value;
+                const bankSelect = this.form.querySelector('select[name="bank"]');
+                const selectedBank = bankSelect.value;
+                
+                if (email && selectedBank) {
+                    const domain = email.split('@')[1];
+                    const expectedDomains = {
+                        'SB': ['standardbank.com', 'sb.co.za'],
+                        'PB': ['premierbank.com', 'pb.co.za'],
+                        'FNB': ['fnb.com', 'fnb.co.za']
+                    };
+                    
+                    if (expectedDomains[selectedBank] && !expectedDomains[selectedBank].some(d => domain.includes(d))) {
+                        showMessage(`Please use your official ${selectedBank} email address.`, 'error');
+                    } else {
+                        clearMessages();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
