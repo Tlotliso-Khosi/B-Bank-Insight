@@ -2034,11 +2034,8 @@ if __name__ == '__main__':
     print("\n💾 Model files will be saved for faster loading next time")
 
     # 👇 Updated to work on Render
-    port = int(os.environ.get('PORT', 5000))
-    print(f"🚀 Starting server on http://0.0.0.0:{port}")
-    app.run(debug=True, host='0.0.0.0', port=port)
-
-if __name__ == '__main__':
-    import os
     port = int(os.environ.get("PORT", 5000))
+    print(f"🚀 Starting Flask on http://0.0.0.0:{port}")
     app.run(host='0.0.0.0', port=port)
+
+
