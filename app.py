@@ -1636,7 +1636,7 @@ def generate_detailed_analysis(averages, bbank_risk, all_risks):
         analysis['positive_factors'].append(f"Excellent credit history of {credit_history:.1f} years demonstrates long-term financial responsibility")
     
     if payment_behavior == 1:
-        analysis['positive_factors'].append("Consistent minimum payment history shows reliable payment behavior")
+        analysis['positive_factors'].appen("Consistent minimum payment history shows reliable payment behavior")
     
     if credit_utilization < 30:
         analysis['positive_factors'].append(f"Low credit utilization of {credit_utilization:.1f}% indicates responsible credit management")
@@ -2018,9 +2018,11 @@ def process():
             'message': f'Error processing request: {str(e)}'
         })
 
+# CRITICAL FIX: Change the main execution block
 if __name__ == '__main__':
-    import os
-    port = int(os.environ.get("PORT", 5000))  # Get port from Render
+    # Get port from environment variable (Render provides this)
+    port = int(os.environ.get("PORT", 5000))
+    
     print("\n🏦 Advanced Multi-Model Risk Assessment System")
     print("=" * 50)
     model_display_names = {'sb': 'SB', 'pb': 'PB', 'fnb': 'FNB', 'bbank': 'B-Bank'}
@@ -2033,8 +2035,11 @@ if __name__ == '__main__':
         print(f"{display_name} Model: {status} {accuracy}")
 
     print("\n💾 Model files will be saved for faster loading next time")
-    print(f"🚀 Starting server on http://0.0.0.0:{port}")
-    app.run(debug=True, host='0.0.0.0', port=port)
-
-
-
+    print(f"🚀 Starting server on 0.0.0.0:{port}")
+    
+    # CRITICAL: Use these exact settings for Render
+    app.run(
+        host='0.0.0.0',  # Must bind to all interfaces for Render
+        port=port,       # Use Render's provided PORT
+        debug=False      # Disable debug mode in production
+    )
