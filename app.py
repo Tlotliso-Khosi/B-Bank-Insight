@@ -2019,6 +2019,7 @@ def process():
         })
 
 if __name__ == '__main__':
+    import os
     print("\n🏦 Advanced Multi-Model Risk Assessment System")
     print("=" * 50)
     model_display_names = {'sb': 'SB', 'pb': 'PB', 'fnb': 'FNB', 'bbank': 'B-Bank'}
@@ -2031,5 +2032,8 @@ if __name__ == '__main__':
         print(f"{display_name} Model: {status} {accuracy}")
     
     print("\n💾 Model files will be saved for faster loading next time")
-    print("🚀 Starting server on http://127.0.0.1:5000")
-    app.run(debug=True, host='127.0.0.1', port=5000)
+
+    # 👇 Updated to work on Render
+    port = int(os.environ.get('PORT', 5000))
+    print(f"🚀 Starting server on http://0.0.0.0:{port}")
+    app.run(debug=True, host='0.0.0.0', port=port)
